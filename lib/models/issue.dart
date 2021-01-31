@@ -1,4 +1,5 @@
 import 'package:github_api_demo/models/label.dart';
+import 'dart:convert';
 
 class Issue {
   final int id;
@@ -37,4 +38,16 @@ class Issue {
     this.comments,
     this.labels,
   });
+
+  // static fromJson(json) {
+  //   List<Map<String, Object>> issuesList = json.decode(json);
+
+  //   return issuesList.map((issue) {
+  //     final issueInstance = Issue();
+  //     issueInstance.id = issue['id'];
+  //     issueInstance.title = issue['title'];
+  //     issueInstance.starCount = item['stargazers_count'];
+  //     return issueInstance;
+  //   }).toList();
+  // }
 }

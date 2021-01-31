@@ -18,7 +18,10 @@ class IssueProvider with ChangeNotifier {
   Future<void> retrieveIssues() async {
     final url = 'https://api.github.com/issues';
     try {
-      final response = await http.get(url); // get for fetching from DB
+      final response = await http.get(
+        url,
+        headers: {"Accept": "application/json"},
+      ); // get for fetching from DB
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
 
       if (extractedData == null) {
@@ -26,21 +29,20 @@ class IssueProvider with ChangeNotifier {
       }
       final List<Issue> loadedIssues = [];
 
-      extractedData.forEach((postId, issue) {
-        loadedIssues.add(Issue(
-          id: issue['id'],
-          state: issue['state'],
-          title: issue['title'],
-          body: issue['body'],
-          updatedAt: issue['updatedAt'],
-          createdAt: issue['createdAt'],
-          comments: issue['comments'],
-        ));
+      extractedData.forEach((issueId, issue) {
+        // loadedIssues.add(
+        //   Issue(
+        //     //id: issue['id'],
+        //     //state: issue['state'],
+        //     title: issue["title"],
+        //     // body: issue['body'],
+        //     // updatedAt: issue['updatedAt'],
+        //     // createdAt: issue['createdAt'],
+        //     // number: issue['number'],
+        //   ),
+        // );
       });
       issues = loadedIssues;
-
-      // 作成日毎にソートする
-      issues.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       notifyListeners();
     } catch (error) {
       throw (error);
