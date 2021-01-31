@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:github_api_demo/pages/home_screen_notifier.dart';
+import 'package:github_api_demo/providers/issues_provider.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -22,19 +23,26 @@ class _HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<HomeScreenNotifier>(context, listen: false);
+    final issuesNotifier = Provider.of<IssueProvider>(context, listen: false);
     notifier.getIssues();
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: issuesNotifier.issues.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Column(
+              children: [
+                Text(
+                  issuesNotifier.issues.toString(),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

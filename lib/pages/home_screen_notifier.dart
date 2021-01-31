@@ -18,7 +18,7 @@ class HomeScreenNotifier extends ChangeNotifier {
   void getIssues() async {
     final notifier = Provider.of<IssueProvider>(context, listen: false);
     await notifier.retrieveIssues();
-    print(notifier.postList);
+    //print(notifier.postList);
   }
 
   // void navigateEditUserIconScreen() {
