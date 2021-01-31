@@ -24,12 +24,12 @@ class IssueProvider with ChangeNotifier {
     if (_isLoading) {
       return;
     }
+    _isLoading = true;
 
     final url =
         'https://api.github.com/repos/flutter/flutter/issues?state=open';
     var response;
 
-    _isLoading = true;
     try {
       response = await http.get(
         url,
@@ -37,11 +37,12 @@ class IssueProvider with ChangeNotifier {
       ); // get
     } catch (error) {
       print(error);
-    } // for fetching from DB
+    }
 
     final body = json.decode(response.body);
     final issues = body.map((dynamic item) => Issue.fromJson(item)).toList();
     this.issues = issues;
+    _isLoading = false;
     notifyListeners();
   }
 }

@@ -18,14 +18,6 @@ class HomeScreenNotifier extends ChangeNotifier {
   void getIssues() async {
     final notifier = Provider.of<IssueProvider>(context, listen: false);
     await notifier.retrieveIssues();
-    //print(notifier.postList);
+    notifyListeners();
   }
-
-  // void navigateEditUserIconScreen() {
-  //   Navigator.of(context, rootNavigator: true).push(
-  //     CupertinoPageRoute(
-  //       builder: (context) => EditUserIconScreen(),
-  //     ),
-  //   );
-  // }
 }
