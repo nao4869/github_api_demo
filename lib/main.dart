@@ -6,17 +6,11 @@ import 'package:provider/provider.dart';
 import 'providers/issues_provider.dart';
 
 void main() {
-  var github = GitHub();
-  var authenticatedUser = GitHub(auth: findAuthenticationFromEnvironment());
-
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => IssueProvider(
-            issues: [],
-            authenticatedUser: authenticatedUser,
-          ),
+          create: (_) => IssueProvider(),
         ),
       ],
       child: MyApp(),

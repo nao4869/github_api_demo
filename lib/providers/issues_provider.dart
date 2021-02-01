@@ -3,23 +3,54 @@ import 'package:flutter/material.dart';
 import 'package:github/github.dart';
 import 'package:http/http.dart' as http;
 
-class IssueProvider with ChangeNotifier {
-  List<dynamic> issues = [];
-  final GitHub authenticatedUser;
+enum Issues {
+  allIssues,
+  webViewIssues,
+  sharedIssues,
+  waitingIssues,
+  severeIssues,
+  shareIssues,
+}
 
+class IssueProvider with ChangeNotifier {
   IssueProvider({
-    this.issues,
-    this.authenticatedUser,
+    this.allIssues = const [],
+    this.webViewIssues = const [],
+    this.sharedIssues = const [],
+    this.waitingIssues = const [],
+    this.severeIssues = const [],
+    this.shareIssues = const [],
   });
 
-  // getter for post
-  List<dynamic> get postList {
-    return [...issues];
+  List<dynamic> allIssues = [];
+  List<dynamic> webViewIssues = [];
+  List<dynamic> sharedIssues = [];
+  List<dynamic> waitingIssues = [];
+  List<dynamic> severeIssues = [];
+  List<dynamic> shareIssues = [];
+
+  List<dynamic> getIssuesList(Issues type) {
+    switch (type) {
+      case Issues.webViewIssues:
+        return webViewIssues;
+      case Issues.sharedIssues:
+        return sharedIssues;
+      case Issues.waitingIssues:
+        return waitingIssues;
+      case Issues.severeIssues:
+        return severeIssues;
+      case Issues.shareIssues:
+        return shareIssues;
+      default:
+        return allIssues;
+    }
   }
 
-  Future<void> retrieveIssues() async {
+  Future<void> retrieveIssues(
+    String label,
+  ) async {
     final url =
-        'https://api.github.com/repos/flutter/flutter/issues?state=open';
+        'https://api.github.com/repos/flutter/flutter/issues?labels=$label';
     var response;
 
     try {
@@ -33,7 +64,7 @@ class IssueProvider with ChangeNotifier {
 
     final body = json.decode(response.body);
     final issues = body.map((dynamic item) => Issue.fromJson(item)).toList();
-    this.issues = issues;
+    this.allIssues = issues;
     notifyListeners();
   }
 }

@@ -30,7 +30,6 @@ class _HomeScreen extends StatelessWidget {
     final notifier = Provider.of<HomeScreenNotifier>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        leading: Container(),
         flexibleSpace: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
@@ -61,7 +60,7 @@ class _HomeScreen extends StatelessWidget {
       child: ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        itemCount: issuesNotifier.issues.length,
+        itemCount: issuesNotifier.allIssues.length,
         itemBuilder: (BuildContext context, int index) {
           return Column(
             children: [
@@ -79,7 +78,7 @@ class _HomeScreen extends StatelessWidget {
                             const SizedBox(width: 8),
                             Text(
                               'No. ' +
-                                  issuesNotifier.issues[index].number
+                                  issuesNotifier.allIssues[index].number
                                       .toString(),
                               style: TextStyle(
                                 color: Colors.blueGrey,
@@ -91,7 +90,7 @@ class _HomeScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            issuesNotifier.issues[index].title.toString(),
+                            issuesNotifier.allIssues[index].title.toString(),
                             maxLines: 10,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -105,7 +104,7 @@ class _HomeScreen extends StatelessWidget {
                             padding: const EdgeInsets.all(8.0),
                             child: SizedBox(
                               child: Text(
-                                issuesNotifier.issues[index].body.toString(),
+                                issuesNotifier.allIssues[index].body.toString(),
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
                               ),

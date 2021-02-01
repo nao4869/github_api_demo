@@ -11,7 +11,7 @@ class HomeScreenNotifier extends ChangeNotifier {
   }) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       isLoading = true;
-      await getIssues();
+      await getIssues('all');
     });
     initialize();
   }
@@ -38,9 +38,11 @@ class HomeScreenNotifier extends ChangeNotifier {
     );
   }
 
-  Future<void> getIssues() async {
+  Future<void> getIssues(
+    String label,
+  ) async {
     final notifier = Provider.of<IssueProvider>(context, listen: false);
-    await notifier.retrieveIssues();
+    await notifier.retrieveIssues(label);
     isLoading = false;
     notifyListeners();
   }
