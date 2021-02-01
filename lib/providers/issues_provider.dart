@@ -49,10 +49,14 @@ class IssueProvider with ChangeNotifier {
   Future<void> retrieveIssues(
     String label,
   ) async {
-    final url =
-        'https://api.github.com/repos/flutter/flutter/issues?labels=$label';
-    var response;
+    String url;
+    if (label == null) {
+      url = 'https://api.github.com/repos/flutter/flutter/issues';
+    } else {
+      url = 'https://api.github.com/repos/flutter/flutter/issues?labels=$label';
+    }
 
+    var response;
     try {
       response = await http.get(
         url,
@@ -64,7 +68,7 @@ class IssueProvider with ChangeNotifier {
 
     final body = json.decode(response.body);
     final issues = body.map((dynamic item) => Issue.fromJson(item)).toList();
-    this.allIssues = issues;
+    allIssues = issues;
     notifyListeners();
   }
 }
