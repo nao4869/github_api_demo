@@ -9,15 +9,18 @@ class HomeScreenNotifier extends ChangeNotifier {
     this.context,
   }) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      getIssues();
+      isLoading = true;
+      await getIssues();
     });
   }
 
   final BuildContext context;
+  bool isLoading = false;
 
-  void getIssues() async {
+  Future<void> getIssues() async {
     final notifier = Provider.of<IssueProvider>(context, listen: false);
     await notifier.retrieveIssues();
+    isLoading = false;
     notifyListeners();
   }
 }

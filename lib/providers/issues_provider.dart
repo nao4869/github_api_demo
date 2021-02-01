@@ -12,20 +12,12 @@ class IssueProvider with ChangeNotifier {
     this.authenticatedUser,
   });
 
-  bool _isLoading = false;
-  bool get getIsLoading => _isLoading;
-
   // getter for post
   List<dynamic> get postList {
     return [...issues];
   }
 
   Future<void> retrieveIssues() async {
-    if (_isLoading) {
-      return;
-    }
-    _isLoading = true;
-
     final url =
         'https://api.github.com/repos/flutter/flutter/issues?state=open';
     var response;
@@ -42,7 +34,6 @@ class IssueProvider with ChangeNotifier {
     final body = json.decode(response.body);
     final issues = body.map((dynamic item) => Issue.fromJson(item)).toList();
     this.issues = issues;
-    _isLoading = false;
     notifyListeners();
   }
 }
