@@ -20,6 +20,12 @@ class HomeScreenNotifier extends ChangeNotifier {
   final BuildContext context;
   final TickerProvider vsync;
 
+  bool _isExcludeClosedIssues = false;
+  bool _isExcludeNoUpdatedIssues = false;
+  bool _isSortByCreatedAt = false;
+  bool _isSortByUpdatedAt = false;
+  bool _isSortByCommentsCount = false;
+
   bool isLoading = false;
   TabController tabController;
   List<Tab> tabs;
@@ -46,5 +52,89 @@ class HomeScreenNotifier extends ChangeNotifier {
     await notifier.retrieveIssues(label);
     isLoading = false;
     notifyListeners();
+  }
+
+  void showSortDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return _buildAddTaskDialog(
+              setState,
+            );
+          },
+        );
+      },
+    );
+  }
+
+  /// ソート用ダイアログ
+  Widget _buildAddTaskDialog(
+    Function setState,
+  ) {
+    return SimpleDialog(
+      children: <Widget>[
+        SimpleDialogOption(
+          onPressed: () {},
+          child: Column(
+            children: [
+              _buildCheckBoxListTile(
+                title: 'Closed状態のIssueを除外する',
+                checkBoxValue: _isExcludeClosedIssues,
+                onChanged: (bool value) {
+                  setState(() => _isExcludeClosedIssues = value);
+                },
+              ),
+              _buildCheckBoxListTile(
+                title: '1年以上更新のないIssueを除外する',
+                checkBoxValue: _isExcludeNoUpdatedIssues,
+                onChanged: (bool value) {
+                  setState(() => _isExcludeNoUpdatedIssues = value);
+                },
+              ),
+              _buildCheckBoxListTile(
+                title: '作成日時の新しい順',
+                checkBoxValue: _isSortByCreatedAt,
+                onChanged: (bool value) {
+                  setState(() => _isSortByCreatedAt = value);
+                },
+              ),
+              _buildCheckBoxListTile(
+                title: '更新日時の古い順',
+                checkBoxValue: _isSortByUpdatedAt,
+                onChanged: (bool value) {
+                  setState(() => _isSortByUpdatedAt = value);
+                },
+              ),
+              _buildCheckBoxListTile(
+                title: 'コメント数の多い順',
+                checkBoxValue: _isSortByCommentsCount,
+                onChanged: (bool value) {
+                  setState(() => _isSortByCommentsCount = value);
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCheckBoxListTile({
+    String title,
+    bool checkBoxValue,
+    Function onChanged,
+  }) {
+    return CheckboxListTile(
+      value: checkBoxValue,
+      onChanged: onChanged,
+      title: Text(
+        title,
+        style: TextStyle(
+          color: Colors.black,
+        ),
+      ),
+    );
   }
 }

@@ -81,6 +81,11 @@ class _HomeScreen extends StatelessWidget {
                 }
               }).toList(),
             ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: notifier.showSortDialog,
+        child: Icon(Icons.search),
+        backgroundColor: Colors.blue,
+      ),
     );
   }
 
@@ -153,6 +158,26 @@ class _HomeScreen extends StatelessWidget {
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildRaisedButton({
+    @required String title,
+    @required VoidCallback onPressed,
+  }) {
+    return RaisedButton(
+      color: Colors.blue,
+      elevation: 0,
+      onPressed: onPressed,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Text(
+        title,
+        style: TextStyle(
+          color: Colors.white,
+        ),
       ),
     );
   }
