@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:github/github.dart';
 import 'package:github_api_demo/pages/home_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -10,7 +9,14 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => IssueProvider(),
+          create: (_) => IssueProvider(
+            allIssues: [],
+            webViewIssues: [],
+            sharedIssues: [],
+            waitingIssues: [],
+            severeIssues: [],
+            shareIssues: [],
+          ),
         ),
       ],
       child: MyApp(),

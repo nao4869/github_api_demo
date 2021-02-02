@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:github_api_demo/constant/constants.dart';
 import 'package:github_api_demo/pages/home_screen_notifier.dart';
 import 'package:github_api_demo/providers/issues_provider.dart';
 import 'package:provider/provider.dart';
@@ -47,20 +48,54 @@ class _HomeScreen extends StatelessWidget {
           : TabBarView(
               controller: notifier.tabController,
               children: notifier.tabs.map((Tab tab) {
-                return _buildAllIssues(context);
+                if (tab.text == allLabel) {
+                  return _buildAllIssues(
+                    context,
+                    IssueLabelEnum.allIssues,
+                  );
+                } else if (tab.text == webviewLabel) {
+                  return _buildAllIssues(
+                    context,
+                    IssueLabelEnum.webViewIssues,
+                  );
+                } else if (tab.text == sharedPreferencesLabel) {
+                  return _buildAllIssues(
+                    context,
+                    IssueLabelEnum.sharedIssues,
+                  );
+                } else if (tab.text == waitingLabel) {
+                  return _buildAllIssues(
+                    context,
+                    IssueLabelEnum.waitingIssues,
+                  );
+                } else if (tab.text == severeLabel) {
+                  return _buildAllIssues(
+                    context,
+                    IssueLabelEnum.severeIssues,
+                  );
+                } else {
+                  return _buildAllIssues(
+                    context,
+                    IssueLabelEnum.shareIssues,
+                  );
+                }
               }).toList(),
             ),
     );
   }
 
-  Widget _buildAllIssues(BuildContext context) {
+  Widget _buildAllIssues(
+    BuildContext context,
+    IssueLabelEnum label,
+  ) {
     final size = MediaQuery.of(context).size;
     final issuesNotifier = Provider.of<IssueProvider>(context);
+    final selectedTabIssues = issuesNotifier.getIssuesList(label);
     return SingleChildScrollView(
       child: ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        itemCount: issuesNotifier.allIssues.length,
+        itemCount: selectedTabIssues.length,
         itemBuilder: (BuildContext context, int index) {
           return Column(
             children: [
@@ -78,8 +113,7 @@ class _HomeScreen extends StatelessWidget {
                             const SizedBox(width: 8),
                             Text(
                               'No. ' +
-                                  issuesNotifier.allIssues[index].number
-                                      .toString(),
+                                  selectedTabIssues[index].number.toString(),
                               style: TextStyle(
                                 color: Colors.blueGrey,
                                 fontWeight: FontWeight.bold,
@@ -90,7 +124,7 @@ class _HomeScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            issuesNotifier.allIssues[index].title.toString(),
+                            selectedTabIssues[index].title.toString(),
                             maxLines: 10,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -104,7 +138,7 @@ class _HomeScreen extends StatelessWidget {
                             padding: const EdgeInsets.all(8.0),
                             child: SizedBox(
                               child: Text(
-                                issuesNotifier.allIssues[index].body.toString(),
+                                selectedTabIssues[index].body.toString(),
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
                               ),

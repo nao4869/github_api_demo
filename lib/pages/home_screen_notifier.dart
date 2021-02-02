@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:github_api_demo/constant/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/issues_provider.dart';
@@ -25,12 +26,12 @@ class HomeScreenNotifier extends ChangeNotifier {
 
   void initialize() {
     tabs = <Tab>[
-      Tab(text: '全て'),
-      Tab(text: 'webview'),
-      Tab(text: 'shared_preferences'),
-      Tab(text: 'waiting for customer response'),
-      Tab(text: 'severe: new feature'),
-      Tab(text: 'share'),
+      Tab(text: allLabel),
+      Tab(text: webviewLabel),
+      Tab(text: sharedPreferencesLabel),
+      Tab(text: waitingLabel),
+      Tab(text: severeLabel),
+      Tab(text: shareLabel),
     ];
     tabController = TabController(
       vsync: vsync,
