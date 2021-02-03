@@ -28,7 +28,7 @@ class HomeScreen extends StatelessWidget {
 class _HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final notifier = Provider.of<HomeScreenNotifier>(context, listen: false);
+    final notifier = Provider.of<HomeScreenNotifier>(context);
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Column(
@@ -94,8 +94,8 @@ class _HomeScreen extends StatelessWidget {
     IssueLabelEnum label,
   ) {
     final size = MediaQuery.of(context).size;
-    final issuesNotifier = Provider.of<IssueProvider>(context);
-    final selectedTabIssues = issuesNotifier.getIssuesList(label);
+    final notifier = Provider.of<HomeScreenNotifier>(context, listen: false);
+    final selectedTabIssues = notifier.updateSortCondition(label);
     return SingleChildScrollView(
       child: ListView.builder(
         physics: const NeverScrollableScrollPhysics(),

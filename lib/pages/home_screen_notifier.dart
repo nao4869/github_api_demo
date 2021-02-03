@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:github_api_demo/constant/constants.dart';
+import 'package:github/github.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/issues_provider.dart';
@@ -25,6 +26,7 @@ class HomeScreenNotifier extends ChangeNotifier {
   bool _isSortByCreatedAt = false;
   bool _isSortByUpdatedAt = false;
   bool _isSortByCommentsCount = false;
+  bool _isUpdating = false;
 
   bool isLoading = false;
   TabController tabController;
@@ -49,9 +51,24 @@ class HomeScreenNotifier extends ChangeNotifier {
     String label,
   }) async {
     final notifier = Provider.of<IssueProvider>(context, listen: false);
-    await notifier.retrieveIssues(label);
+    await notifier.retrieveIssues();
     isLoading = false;
     notifyListeners();
+  }
+
+  List<Issue> updateSortCondition(
+    IssueLabelEnum type,
+  ) {
+    final notifier = Provider.of<IssueProvider>(context, listen: false);
+    final sortedIssues = notifier.getIssuesList(
+      type: type,
+      isExcludeClosedIssues: _isExcludeClosedIssues,
+      isExcludeNoUpdatedIssues: _isExcludeNoUpdatedIssues,
+      isSortByCreatedAt: _isSortByCreatedAt,
+      isSortByUpdatedAt: _isSortByUpdatedAt,
+      isSortByCommentsCount: _isSortByCommentsCount,
+    );
+    return sortedIssues;
   }
 
   void showSortDialog() {
@@ -114,6 +131,17 @@ class HomeScreenNotifier extends ChangeNotifier {
                   setState(() => _isSortByCommentsCount = value);
                 },
               ),
+              SizedBox(
+                width: 250,
+                child: _buildRaisedButton(
+                  title: '設定',
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    updateSortCondition(IssueLabelEnum.allIssues);
+                    notifyListeners();
+                  },
+                ),
+              ),
             ],
           ),
         ),
@@ -133,6 +161,26 @@ class HomeScreenNotifier extends ChangeNotifier {
         title,
         style: TextStyle(
           color: Colors.black,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRaisedButton({
+    @required String title,
+    @required VoidCallback onPressed,
+  }) {
+    return RaisedButton(
+      color: Colors.blue,
+      elevation: 0,
+      onPressed: onPressed,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Text(
+        title,
+        style: TextStyle(
+          color: Colors.white,
         ),
       ),
     );
